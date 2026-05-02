@@ -1,0 +1,23 @@
+{
+  "name": "qa-automation-suite",
+  "version": "1.0.0",
+  "description": "E2E and API test automation with Playwright and TypeScript",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GreSastre/qa-automation-suite.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/GreSastre/qa-automation-suite/issues"
+  },
+  "homepage": "https://github.com/GreSastre/qa-automation-suite#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "@types/node": "^25.6.0"
+  }
+}
