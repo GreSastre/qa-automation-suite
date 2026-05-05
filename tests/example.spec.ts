@@ -67,7 +67,6 @@ test.describe('Flujo de compra en Saucedemo', ()=>{
  //login 
   test.beforeEach(async ({ page }) => {
   await page.goto('https://www.saucedemo.com/');
-
   await page.getByPlaceholder('Username').fill('standard_user');
 
   await page.getByPlaceholder('Password').fill('secret_sauce');
@@ -108,7 +107,16 @@ test('redireccion correcta despues del login', async ({ page }) => {
   await expect(page.getByText('Products')).toBeVisible();
 });
 
+test('logout exitoso', async ({ page }) => {
+ await page.getByRole("button", {name:'Open Menu'}).click();
+ await page.locator('[data-test="logout-sidebar-link"]').click();
+ await expect(page).toHaveURL(/saucedemo/);
+ await expect(page.getByText('Swag Labs')).toBeVisible()
+});
 
-
+test('filter', async ({ page }) => {
+  await page.locator('[data-test="product-sort-container"]').selectOption('lohi');
+  await expect(page.locator('.inventory_item_name').first()).toHaveText('Sauce Labs Onesie');
+});
 
 })
