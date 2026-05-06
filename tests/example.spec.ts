@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
 import { InventoryPage } from '../pages/InventoryPage';
-
+import { CheckOutPage } from '../pages/CheckOutPage';
 test.describe('Login-Sauce demo', () => {
 
   test('Login Exitoso', async ({ page }) => {
@@ -59,6 +59,7 @@ test.describe('Flujo de compra en Saucedemo', ()=>{
 // agregar producto al carrito 
 test('Pedido Exitso', async({page})=>{
 const inventoryPage= new InventoryPage(page);
+const checkoutPage= new CheckOutPage(page)
 //Agregar producto al carrito
 await inventoryPage.addProduct();
 
@@ -69,15 +70,12 @@ await expect(page.locator('.shopping_cart_badge')).toHaveText('1');
 await inventoryPage.gotoCart();
 
  //ir a checkout
- await page.locator('[data-test="checkout"]').click();
+ await checkoutPage.gotoCheckout();;
  //rellenar campos de datos 
-await page.getByPlaceholder('First Name').fill('Gre');
-await page.getByPlaceholder('Last Name').fill('Sastre');
-await page.getByPlaceholder('Zip/Postal Code').fill('32807');
-await page.getByRole("button", {name:'Continue'}).click();
-await page.locator('[data-test="finish"]').click();
-await expect(page.locator('[data-test="complete-header"]')).toHaveText('Thank you for your order!');
-
+ await checkoutPage.fillForms('Gre','Sastre','32807')
+ await checkoutPage.finishOrder();
+ //verificar que se hizo la orden correctamente
+ await expect(page.locator('[data-test="complete-header"]')).toHaveText('Thank you for your order!');
 
 })
 
