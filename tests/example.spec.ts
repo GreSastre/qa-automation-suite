@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
+import { InventoryPage } from '../pages/InventoryPage';
 
 test.describe('Login-Sauce demo', () => {
 
@@ -57,14 +58,15 @@ test.describe('Flujo de compra en Saucedemo', ()=>{
 
 // agregar producto al carrito 
 test('Pedido Exitso', async({page})=>{
+const inventoryPage= new InventoryPage(page);
 //Agregar producto al carrito
-await page.locator('[data-test="add-to-cart-sauce-labs-backpack"]').click();
+await inventoryPage.addProduct();
 
 //verificar que el carrito no este vacio
 await expect(page.locator('.shopping_cart_badge')).toHaveText('1');
 
 //ir al carrito de compra
-await page.locator('[data-test="shopping-cart-link"]').click();
+await inventoryPage.gotoCart();
 
  //ir a checkout
  await page.locator('[data-test="checkout"]').click();
@@ -93,7 +95,8 @@ test('logout', async ({ page }) => {
 });
 
 test('filter', async ({ page }) => {
-  await page.locator('[data-test="product-sort-container"]').selectOption('lohi');
+  const inventoryPage= new InventoryPage(page);
+  await inventoryPage.filterProducts()
   await expect(page.locator('.inventory_item_name').first()).toHaveText('Sauce Labs Onesie');
 });
 
