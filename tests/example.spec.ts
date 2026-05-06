@@ -1,81 +1,59 @@
 import { test, expect } from '@playwright/test';
-test.describe('Login-Sauce demo', ()=>{
+import { LoginPage } from '../pages/LoginPage';
 
-  test.beforeEach(async ({ page }) => {
-  await page.goto('https://www.saucedemo.com/');
+test.describe('Login-Sauce demo', () => {
+
+  test('Login Exitoso', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    await loginPage.goto();
+    await loginPage.login('standard_user', 'secret_sauce');
+    await expect(page).toHaveURL(/inventory/);
+  });
+
 });
 
-test ('Login Exitoso', async({page}) => {
-
-  
-  await page.getByPlaceholder('Username').fill('standard_user');
-
-  await page.getByPlaceholder('Password').fill('secret_sauce');
-
-  await page.getByRole('button', {name: 'Login'}).click();
-
-  await expect(page).toHaveURL(/inventory/);
-
-
-})
  //Test fallido co usuario incorrecto
 test ('Login Fallido', async({page}) => {
 
-
-  await page.getByPlaceholder('Username').fill('usuario_falso');
-
-  await page.getByPlaceholder('Password').fill('secret_sauce');
-
-  await page.getByRole('button', {name: 'Login'}).click();
+  const loginPage = new LoginPage(page);
+    await loginPage.goto();
+    await loginPage.login('usuario_falso', 'secret_sauce');
 
   await expect(page.locator('[data-test="error"]')).toContainText('Username and password do not match');
 })
  
 //test fallidos con campos vacios 
 test ('Login Fallido-campos vacios', async({page}) => {
-
-
-
-  await page.getByRole('button', {name: 'Login'}).click();
-
-  await expect(page.locator('[data-test="error"]')).toBeVisible(); 
+    const loginPage = new LoginPage(page);
+    await loginPage.goto();
+    await loginPage.login('','');
+    await expect(page.locator('[data-test="error"]')).toBeVisible(); 
 
 
 })
 
 //test para usuario bloqueado 
 test ('Login Fallido-Usuario bloqueado', async({page}) => {
-
  
-
-  await page.getByPlaceholder('Username').fill('locked_out_user');
-
-  await page.getByPlaceholder('Password').fill('secret_sauce');
-
-  await page.getByRole('button', {name: 'Login'}).click();
-
+  const loginPage = new LoginPage(page);
+  await loginPage.goto();
+  await loginPage.login('locked_out_user','secret_sauce');
   await expect(page.locator('[data-test="error"]')).toContainText('locked out');
 
 
  })
-})
+
 
 
 test.describe('Flujo de compra en Saucedemo', ()=>{
  
  
- //login 
+
   test.beforeEach(async ({ page }) => {
-  await page.goto('https://www.saucedemo.com/');
-  await page.getByPlaceholder('Username').fill('standard_user');
-
-  await page.getByPlaceholder('Password').fill('secret_sauce');
-
-  await page.getByRole('button', {name: 'Login'}).click();
-
-  await expect(page).toHaveURL(/inventory/);
-});
-
+    const loginPage = new LoginPage(page);
+    await loginPage.goto();
+    await loginPage.login('standard_user', 'secret_sauce');
+  });
 
 // agregar producto al carrito 
 test('Pedido Exitso', async({page})=>{
@@ -107,7 +85,7 @@ test('redireccion correcta despues del login', async ({ page }) => {
   await expect(page.getByText('Products')).toBeVisible();
 });
 
-test('logout exitoso', async ({ page }) => {
+test('logout', async ({ page }) => {
  await page.getByRole("button", {name:'Open Menu'}).click();
  await page.locator('[data-test="logout-sidebar-link"]').click();
  await expect(page).toHaveURL(/saucedemo/);
