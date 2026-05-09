@@ -1,5 +1,6 @@
 # QA Automation Suite
 
+[![Playwright Tests](https://github.com/GreSastre/qa-automation-suite/actions/workflows/playwright.yml/badge.svg)](https://github.com/GreSastre/qa-automation-suite/actions/workflows/playwright.yml)
 End-to-end and API test automation framework built with Playwright and TypeScript.
 
 ## Tech Stack
