@@ -10,6 +10,13 @@ End-to-end and API test automation framework built with Playwright and TypeScrip
 - GitHub Actions CI/CD
 - Page Object Model pattern
 
+## Test Stats
+
+- 10+ UI tests across 2 test suites
+- 6 API tests covering full CRUD operations
+- Tests run on Chromium, Firefox and WebKit
+- CI/CD with GitHub Actions on every push
+
 ## Project Structure
 
     qa-automation-suite/
