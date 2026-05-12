@@ -72,3 +72,40 @@ test.describe("Reqres API", () => {
     });
   });
 });
+
+test.describe("Authentication", () => {
+  test("POST login y obtener token", async ({ request }) => {
+    const response = await request.post("/api/login", {
+      data: {
+        email: "eve.holt@reqres.in",
+        password: "cityslicka",
+      },
+    });
+
+    expect(response.status()).toBe(200);
+
+    const body = await response.json();
+    console.log(body);
+    expect(body.token).toBeTruthy();
+  });
+
+  test("usar token para autenticar peticion", async ({ request }) => {
+    const loginResponse = await request.post("api/login", {
+      data: {
+        email: "eve.holt@reqres.in",
+        password: "cityslicka",
+      },
+    });
+
+    const { token } = await loginResponse.json();
+    const response = await request.get("/api/users/2", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    expect(response.status()).toBe(200);
+    const body = await response.json();
+    expect(body.data.email).toBe("janet.weaver@reqres.in");
+  });
+});
