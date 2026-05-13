@@ -35,4 +35,26 @@ test.describe("Mixed UI + API tests", () => {
       "Thank you for your order!",
     );
   });
+
+  test("crear usuario por API y verificar respuesta", async ({ request }) => {
+    // Paso 1 — crear usuario por API
+    const response = await request.post("/api/users", {
+      data: {
+        name: "Gre",
+        job: "QA Automation Engineer",
+      },
+    });
+
+    expect(response.status()).toBe(201);
+
+    const body = await response.json();
+    expect(body.name).toBe("Gre");
+    expect(body.job).toBe("QA Automation Engineer");
+    expect(body.id).toBeTruthy();
+    expect(body.createdAt).toBeTruthy();
+
+    // Paso 2 — teardown: borrar el usuario creado
+    const deleteResponse = await request.delete(`/api/users/${body.id}`);
+    expect(deleteResponse.status()).toBe(204);
+  });
 });
