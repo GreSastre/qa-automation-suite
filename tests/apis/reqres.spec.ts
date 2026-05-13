@@ -89,6 +89,18 @@ test.describe("Authentication", () => {
     expect(body.token).toBeTruthy();
   });
 
+  test("POST con ceredenciales incorrectas", async ({ request }) => {
+    const response = await request.post("/api/login", {
+      data: {
+        email: "usuario.falso@test.com",
+        password: "incorrect",
+      },
+    });
+    expect(response.status()).toBe(400);
+    const body = await response.json();
+    expect(body.error).toBe("user not found");
+  });
+
   test("usar token para autenticar peticion", async ({ request }) => {
     const loginResponse = await request.post("api/login", {
       data: {
