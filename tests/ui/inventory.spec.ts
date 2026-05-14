@@ -1,4 +1,4 @@
-import { test, expect } from "./fixture";
+import { test, expect } from "../../helpers/fixture";
 
 test("ver productos con login automatico", async ({ authenticatedPage }) => {
   await expect(authenticatedPage.getByText("Products")).toBeVisible();
