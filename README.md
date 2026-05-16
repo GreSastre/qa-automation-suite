@@ -3,6 +3,20 @@
 [![Playwright Tests](https://github.com/GreSastre/qa-automation-suite/actions/workflows/playwright.yml/badge.svg)](https://github.com/GreSastre/qa-automation-suite/actions/workflows/playwright.yml)
 End-to-end and API test automation framework built with Playwright and TypeScript.
 
+## About
+
+Automated testing framework for web applications using **Playwright** and **TypeScript**.
+Implements Page Object Model pattern, API testing, mixed UI+API tests, and CI/CD integration with GitHub Actions.
+
+### Key Features
+
+- End-to-end UI tests across Chromium, Firefox and WebKit
+- REST API testing with full CRUD coverage
+- Mixed UI + API test patterns
+- External test data management with JSON
+- Environment variables for secure credential handling
+- Allure Reports integration
+
 ## Tech Stack
 
 - Playwright
