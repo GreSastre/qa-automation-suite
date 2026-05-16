@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 import { LoginPage } from "../../pages/LoginPage";
 import { InventoryPage } from "../../pages/InventoryPage";
 import { CheckOutPage } from "../../pages/CheckOutPage";
+import users from "../../test-data/users.json";
 test.describe("Login-Sauce demo", () => {
   test("Login Exitoso", async ({ page }) => {
     const loginPage = new LoginPage(page);
@@ -9,6 +10,32 @@ test.describe("Login-Sauce demo", () => {
     await loginPage.login("standard_user", "secret_sauce");
     await expect(page).toHaveURL(/inventory/);
   });
+});
+test("login exitoso con datos externos", async ({ page }) => {
+  const loginPage = new LoginPage(page);
+  await loginPage.goto();
+  await loginPage.login(users.validUser.username, users.validUser.password);
+  await expect(page).toHaveURL(/inventory/);
+});
+
+test("login fallido con usuario invalido - datos externos", async ({
+  page,
+}) => {
+  const loginPage = new LoginPage(page);
+  await loginPage.goto();
+  await loginPage.login(users.invalidUser.username, users.invalidUser.password);
+  await expect(page.locator('[data-test="error"]')).toContainText(
+    "Username and password do not match",
+  );
+});
+
+test("login fallido con usuario bloqueado - datos externos", async ({
+  page,
+}) => {
+  const loginPage = new LoginPage(page);
+  await loginPage.goto();
+  await loginPage.login(users.lockedUser.username, users.lockedUser.password);
+  await expect(page.locator('[data-test="error"]')).toContainText("locked out");
 });
 
 //Test fallido co usuario incorrecto
