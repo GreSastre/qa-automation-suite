@@ -1,5 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
-
+import dotenv from "dotenv";
+dotenv.config();
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -19,10 +20,10 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: "html",
   use: {
-    baseURL: "https://reqres.in",
     trace: "on-first-retry",
+    baseURL: process.env.BASE_URL,
     extraHTTPHeaders: {
-      "x-api-key": "free_user_3DMjRi1AKoLRdSnAMPqO0VRP5fv",
+      "x-api-key": process.env.API_KEY || "",
     },
   },
   /* Configure projects for major browsers */
