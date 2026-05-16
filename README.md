@@ -62,3 +62,7 @@ Run only UI tests
 Run only API tests
 
     npx playwright test tests/api
+
+## Test Reports
+
+![Allure Report](screenshots/allure-report.png)
