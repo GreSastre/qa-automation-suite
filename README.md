@@ -26,10 +26,11 @@ Implements Page Object Model pattern, API testing, mixed UI+API tests, and CI/CD
 
 ## Test Stats
 
-- 10+ UI tests across 2 test suites
-- 6 API tests covering full CRUD operations
-- Tests run on Chromium, Firefox and WebKit
+- 75 test cases passing across 3 browsers
+- Full CRUD API test coverage
+- Mixed UI + API test patterns
 - CI/CD with GitHub Actions on every push
+- Allure Reports integration
 
 ## Project Structure
 
