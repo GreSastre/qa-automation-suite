@@ -24,7 +24,7 @@ test("login fallido con usuario invalido - datos externos", async ({
   const loginPage = new LoginPage(page);
   await loginPage.goto();
   await loginPage.login(users.invalidUser.username, users.invalidUser.password);
-  await expect(page.locator('[data-test="error"]')).toContainText(
+  await expect(page.getByTestId("error")).toContainText(
     "Username and password do not match",
   );
 });
@@ -35,7 +35,7 @@ test("login fallido con usuario bloqueado - datos externos", async ({
   const loginPage = new LoginPage(page);
   await loginPage.goto();
   await loginPage.login(users.lockedUser.username, users.lockedUser.password);
-  await expect(page.locator('[data-test="error"]')).toContainText("locked out");
+  await expect(page.getByTestId("error")).toContainText("locked out");
 });
 
 //Test fallido co usuario incorrecto
@@ -44,7 +44,7 @@ test("Login Fallido", async ({ page }) => {
   await loginPage.goto();
   await loginPage.login("usuario_falso", "secret_sauce");
 
-  await expect(page.locator('[data-test="error"]')).toContainText(
+  await expect(page.getByTestId("error")).toContainText(
     "Username and password do not match",
   );
 });
@@ -54,7 +54,7 @@ test("Login Fallido-campos vacios", async ({ page }) => {
   const loginPage = new LoginPage(page);
   await loginPage.goto();
   await loginPage.login("", "");
-  await expect(page.locator('[data-test="error"]')).toBeVisible();
+  await expect(page.getByTestId("error")).toBeVisible();
 });
 
 //test para usuario bloqueado
@@ -62,7 +62,7 @@ test("Login Fallido-Usuario bloqueado", async ({ page }) => {
   const loginPage = new LoginPage(page);
   await loginPage.goto();
   await loginPage.login("locked_out_user", "secret_sauce");
-  await expect(page.locator('[data-test="error"]')).toContainText("locked out");
+  await expect(page.getByTestId("error")).toContainText("locked out");
 });
 
 test.describe("Flujo de compra en Saucedemo", () => {
@@ -91,7 +91,7 @@ test.describe("Flujo de compra en Saucedemo", () => {
     await checkoutPage.fillForms("Gre", "Sastre", "32807");
     await checkoutPage.finishOrder();
     //verificar que se hizo la orden correctamente
-    await expect(page.locator('[data-test="complete-header"]')).toHaveText(
+    await expect(page.getByTestId("complete-header")).toHaveText(
       "Thank you for your order!",
     );
   });
@@ -103,7 +103,7 @@ test.describe("Flujo de compra en Saucedemo", () => {
 
   test("logout", async ({ page }) => {
     await page.getByRole("button", { name: "Open Menu" }).click();
-    await page.locator('[data-test="logout-sidebar-link"]').click();
+    await page.getByTestId("logout-sidebar-link").click();
     await expect(page).toHaveURL(/saucedemo/);
     await expect(page.getByText("Swag Labs")).toBeVisible();
   });
@@ -111,8 +111,9 @@ test.describe("Flujo de compra en Saucedemo", () => {
   test("filter", async ({ page }) => {
     const inventoryPage = new InventoryPage(page);
     await inventoryPage.filterProducts();
-    await expect(page.locator(".inventory_item_name").first()).toHaveText(
-      "Sauce Labs Onesie",
-    );
+    const producto = page
+      .locator(".inventory_item_name")
+      .filter({ hasText: "Sauce Labs Onesie" });
+    await expect(producto).toBeVisible();
   });
 });

@@ -12,6 +12,7 @@ dotenv.config();
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
+
 export default defineConfig({
   testDir: "./tests",
   fullyParallel: true,
@@ -20,6 +21,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: [["html"], ["allure-playwright"]],
   use: {
+    testIdAttribute: "data-test",
     trace: "on-first-retry",
     baseURL: process.env.BASE_URL,
     extraHTTPHeaders: {
