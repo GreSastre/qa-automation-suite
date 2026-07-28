@@ -39,12 +39,8 @@ test("login fallido con usuario bloqueado - datos externos", async ({
 });
 
 //Test fallido co usuario incorrecto
-test("Login Fallido", async ({ page }) => {
-  const loginPage = new LoginPage(page);
-  await loginPage.goto();
-  await loginPage.login("usuario_falso", "secret_sauce");
-
-  await expect(page.getByTestId("error")).toContainText(
+test("Login Fallido", async ({ invalidUserLogin }) => {
+  await expect(invalidUserLogin.getByTestId("error")).toContainText(
     "Username and password do not match",
   );
 });
@@ -58,11 +54,10 @@ test("Login Fallido-campos vacios", async ({ page }) => {
 });
 
 //test para usuario bloqueado
-test("Login Fallido-Usuario bloqueado", async ({ page }) => {
-  const loginPage = new LoginPage(page);
-  await loginPage.goto();
-  await loginPage.login("locked_out_user", "secret_sauce");
-  await expect(page.getByTestId("error")).toContainText("locked out");
+test("Login Fallido-Usuario bloqueado", async ({ lockedUserLogin }) => {
+  await expect(lockedUserLogin.getByTestId("error")).toContainText(
+    "locked out",
+  );
 });
 
 test.describe("Flujo de compra en Saucedemo", () => {
