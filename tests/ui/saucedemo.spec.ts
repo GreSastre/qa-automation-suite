@@ -66,7 +66,7 @@ test.describe("Flujo de compra en Saucedemo", () => {
     const inventoryPage = new InventoryPage(authenticatedPage);
     const checkoutPage = new CheckOutPage(authenticatedPage);
     //Agregar producto al carrito
-    await inventoryPage.addProduct();
+    await inventoryPage.addProduct("sauce-labs-backpack");
 
     //verificar que el carrito no este vacio
     await expect(authenticatedPage.locator(".shopping_cart_badge")).toHaveText(
