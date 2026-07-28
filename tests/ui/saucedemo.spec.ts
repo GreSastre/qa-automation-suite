@@ -1,8 +1,8 @@
-import { test, expect } from "@playwright/test";
 import { LoginPage } from "../../pages/LoginPage";
 import { InventoryPage } from "../../pages/InventoryPage";
 import { CheckOutPage } from "../../pages/CheckOutPage";
 import users from "../../test-data/users.json";
+import { test, expect } from "../../helpers/fixture";
 test.describe("Login-Sauce demo", () => {
   test("Login Exitoso", async ({ page }) => {
     const loginPage = new LoginPage(page);
@@ -66,21 +66,17 @@ test("Login Fallido-Usuario bloqueado", async ({ page }) => {
 });
 
 test.describe("Flujo de compra en Saucedemo", () => {
-  test.beforeEach(async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    await loginPage.goto();
-    await loginPage.login("standard_user", "secret_sauce");
-  });
-
   // agregar producto al carrito
-  test("Pedido Exitso", async ({ page }) => {
-    const inventoryPage = new InventoryPage(page);
-    const checkoutPage = new CheckOutPage(page);
+  test("Pedido Exitso", async ({ authenticatedPage }) => {
+    const inventoryPage = new InventoryPage(authenticatedPage);
+    const checkoutPage = new CheckOutPage(authenticatedPage);
     //Agregar producto al carrito
     await inventoryPage.addProduct();
 
     //verificar que el carrito no este vacio
-    await expect(page.locator(".shopping_cart_badge")).toHaveText("1");
+    await expect(authenticatedPage.locator(".shopping_cart_badge")).toHaveText(
+      "1",
+    );
 
     //ir al carrito de compra
     await inventoryPage.gotoCart();
@@ -91,27 +87,29 @@ test.describe("Flujo de compra en Saucedemo", () => {
     await checkoutPage.fillForms("Gre", "Sastre", "32807");
     await checkoutPage.finishOrder();
     //verificar que se hizo la orden correctamente
-    await expect(page.getByTestId("complete-header")).toHaveText(
+    await expect(authenticatedPage.getByTestId("complete-header")).toHaveText(
       "Thank you for your order!",
     );
   });
 
-  test("redireccion correcta despues del login", async ({ page }) => {
-    await page.waitForURL(/inventory/);
-    await expect(page.getByText("Products")).toBeVisible();
+  test("redireccion correcta despues del login", async ({
+    authenticatedPage,
+  }) => {
+    await authenticatedPage.waitForURL(/inventory/);
+    await expect(authenticatedPage.getByText("Products")).toBeVisible();
   });
 
-  test("logout", async ({ page }) => {
-    await page.getByRole("button", { name: "Open Menu" }).click();
-    await page.getByTestId("logout-sidebar-link").click();
-    await expect(page).toHaveURL(/saucedemo/);
-    await expect(page.getByText("Swag Labs")).toBeVisible();
+  test("logout", async ({ authenticatedPage }) => {
+    await authenticatedPage.getByRole("button", { name: "Open Menu" }).click();
+    await authenticatedPage.getByTestId("logout-sidebar-link").click();
+    await expect(authenticatedPage).toHaveURL(/saucedemo/);
+    await expect(authenticatedPage.getByText("Swag Labs")).toBeVisible();
   });
 
-  test("filter", async ({ page }) => {
-    const inventoryPage = new InventoryPage(page);
+  test("filter", async ({ authenticatedPage }) => {
+    const inventoryPage = new InventoryPage(authenticatedPage);
     await inventoryPage.filterProducts();
-    const producto = page
+    const producto = authenticatedPage
       .locator(".inventory_item_name")
       .filter({ hasText: "Sauce Labs Onesie" });
     await expect(producto).toBeVisible();
