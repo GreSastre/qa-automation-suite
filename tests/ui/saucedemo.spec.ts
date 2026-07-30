@@ -1,6 +1,7 @@
 import { LoginPage } from "../../pages/LoginPage";
 import { InventoryPage } from "../../pages/InventoryPage";
 import { CheckOutPage } from "../../pages/CheckOutPage";
+import { MenuPage } from "../../pages/MenuPage";
 import users from "../../test-data/users.json";
 import { test, expect } from "../../helpers/fixture";
 test.describe("Login-Sauce demo", () => {
@@ -95,8 +96,9 @@ test.describe("Flujo de compra en Saucedemo", () => {
   });
 
   test("logout", async ({ authenticatedPage }) => {
-    await authenticatedPage.getByRole("button", { name: "Open Menu" }).click();
-    await authenticatedPage.getByTestId("logout-sidebar-link").click();
+    const menuPage = new MenuPage(authenticatedPage);
+
+    await menuPage.logOut();
     await expect(authenticatedPage).toHaveURL(/saucedemo/);
     await expect(authenticatedPage.getByText("Swag Labs")).toBeVisible();
   });
