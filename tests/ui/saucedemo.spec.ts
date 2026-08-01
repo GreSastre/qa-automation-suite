@@ -88,6 +88,23 @@ test.describe("Flujo de compra en Saucedemo", () => {
     );
   });
 
+  test("agregar dos productos al carrito", async ({ authenticatedPage }) => {
+    const inventoryPage = new InventoryPage(authenticatedPage);
+    await inventoryPage.addProduct("sauce-labs-backpack");
+    await inventoryPage.addProduct("sauce-labs-bolt-t-shirt");
+    await expect(authenticatedPage.locator(".shopping_cart_badge")).toHaveText(
+      "2",
+    );
+    const productoMochila = authenticatedPage
+      .locator(".inventory_item_name")
+      .filter({ hasText: "Sauce Labs Backpack" });
+    const productoCamiseta = authenticatedPage
+      .locator(".inventory_item_name")
+      .filter({ hasText: "Sauce Labs Bolt T-shirt" });
+    await expect(productoMochila).toBeVisible();
+    await expect(productoCamiseta).toBeVisible();
+  });
+
   test("redireccion correcta despues del login", async ({
     authenticatedPage,
   }) => {
@@ -97,7 +114,6 @@ test.describe("Flujo de compra en Saucedemo", () => {
 
   test("logout", async ({ authenticatedPage }) => {
     const menuPage = new MenuPage(authenticatedPage);
-
     await menuPage.logOut();
     await expect(authenticatedPage).toHaveURL(/saucedemo/);
     await expect(authenticatedPage.getByText("Swag Labs")).toBeVisible();
