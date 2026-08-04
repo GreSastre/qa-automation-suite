@@ -22,7 +22,7 @@ test.describe("Mixed UI + API tests", () => {
 
     // Paso 3 — agregar producto al carrito por UI
     const inventoryPage = new InventoryPage(page);
-    await inventoryPage.addProduct();
+    await inventoryPage.addProduct("sauce-labs-backpack");
     await expect(page.locator(".shopping_cart_badge")).toHaveText("1");
 
     // Paso 4 — completar la orden
