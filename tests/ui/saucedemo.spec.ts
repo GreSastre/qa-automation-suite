@@ -97,7 +97,7 @@ test.describe("Flujo de compra en Saucedemo", () => {
     );
     const productoMochila = authenticatedPage
       .locator(".inventory_item_name")
-      .filter({ hasText: "Sauce Labs Backpack" });
+      .filter({ hasText: "Sauce Labs Backpak" });
     const productoCamiseta = authenticatedPage
       .locator(".inventory_item_name")
       .filter({ hasText: "Sauce Labs Bolt T-shirt" });
